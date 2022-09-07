@@ -3,8 +3,8 @@ width = 14;
 length = 14;
 height = 3;
 
-for (i = [0:19:19*12]){
-    for (j = [0:19:19*5]){
+for (i = [0:19:19*1]){
+    for (j = [0:19:19*1]){
         translate([i, j, 0]){
             difference() {
                 cube([19,19,2], center=true);
