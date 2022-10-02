@@ -1,0 +1,58 @@
+SWITCH_WIDTH = 19;
+SWITCH_INNER_WIDTH = 14;
+SWITCH_OUTCROP_WIDTH = 15;
+SWITCH_OUTCROP_LENGTH = 3.75;
+SWITCH_OUTCROP_OFFSET = 3.75;
+PLATE_HEIGHT = 2;
+ROWS = 5;
+COLUMNS = 12;
+PLATE_WIDTH = SWITCH_WIDTH * COLUMNS;
+PLATE_LENGTH = SWITCH_WIDTH * ROWS;
+PLATE_WALL_THICKNESS = 5;
+PLATE_WIDTH_TOTAL = PLATE_WALL_THICKNESS + PLATE_WIDTH;
+PLATE_LENGTH_TOTAL = PLATE_WALL_THICKNESS + PLATE_LENGTH;
+MCU_SECTION_WIDTH = 35;
+MCU_SECTION_LENGTH = SWITCH_WIDTH * ROWS;
+
+translate([0,  SWITCH_WIDTH * COLUMNS / 2 + MCU_SECTION_WIDTH / 2, 0]) {
+    cube([MCU_SECTION_LENGTH, MCU_SECTION_WIDTH, PLATE_HEIGHT], center = true);
+}
+translate([ -(SWITCH_WIDTH * ROWS) / 2 + SWITCH_WIDTH / 2, -(SWITCH_WIDTH * COLUMNS) / 2 + SWITCH_WIDTH / 2, 0 ]) {
+    for (switchPosY = [0 : SWITCH_WIDTH : SWITCH_WIDTH * (ROWS - 1)]) {
+        for (switchPosX = [0 : SWITCH_WIDTH : SWITCH_WIDTH * (COLUMNS - 1)]) {
+            translate([switchPosY, switchPosX, 0]) {
+                difference() {
+                    cube([SWITCH_WIDTH, SWITCH_WIDTH, PLATE_HEIGHT], center = true);
+                    
+                    translate([SWITCH_WIDTH - SWITCH_INNER_WIDTH, SWITCH_WIDTH - SWITCH_INNER_WIDTH, 0]) {
+
+                    }
+                        cube([SWITCH_INNER_WIDTH, SWITCH_INNER_WIDTH, PLATE_HEIGHT+1], center = true);
+                        AOffsetY = (SWITCH_WIDTH - SWITCH_OUTCROP_OFFSET) - (SWITCH_OUTCROP_LENGTH/2);
+                        AOffsetX = (SWITCH_WIDTH - SWITCH_OUTCROP_WIDTH);
+                        BOffsetY = (SWITCH_OUTCROP_OFFSET) - (SWITCH_OUTCROP_LENGTH);
+                        BOffsetX = (SWITCH_WIDTH - SWITCH_OUTCROP_OFFSET);
+                        translate([SWITCH_OUTCROP_OFFSET, 0, 0]) {
+                            cube([SWITCH_OUTCROP_LENGTH, SWITCH_OUTCROP_WIDTH, PLATE_HEIGHT + 1], center = true);
+                        }
+                        translate([-SWITCH_OUTCROP_OFFSET, 0, 0]) {
+                            cube([SWITCH_OUTCROP_LENGTH, SWITCH_OUTCROP_WIDTH, PLATE_HEIGHT + 1], center = true);
+                        }
+                }
+            }
+        }
+    }
+}
+
+translate([-MCU_SECTION_LENGTH / 2,  SWITCH_WIDTH * COLUMNS / 2 + MCU_SECTION_WIDTH, -PLATE_HEIGHT / 2 ]) {
+    cube([MCU_SECTION_LENGTH, PLATE_WALL_THICKNESS, PLATE_HEIGHT]);
+}
+translate([-MCU_SECTION_LENGTH / 2,  -SWITCH_WIDTH * COLUMNS / 2 - PLATE_WALL_THICKNESS, -PLATE_HEIGHT / 2 ]) {
+    cube([MCU_SECTION_LENGTH, PLATE_WALL_THICKNESS, PLATE_HEIGHT]);
+}
+translate([-MCU_SECTION_LENGTH / 2 - PLATE_WALL_THICKNESS, -SWITCH_WIDTH * COLUMNS / 2 - PLATE_WALL_THICKNESS, -PLATE_HEIGHT / 2 ]) {
+    cube([PLATE_WALL_THICKNESS, MCU_SECTION_WIDTH + SWITCH_WIDTH * COLUMNS + PLATE_WALL_THICKNESS * 2, PLATE_HEIGHT]);
+}
+translate([MCU_SECTION_LENGTH / 2 , -SWITCH_WIDTH * COLUMNS / 2 - PLATE_WALL_THICKNESS, -PLATE_HEIGHT / 2 ]) {
+    cube([PLATE_WALL_THICKNESS, MCU_SECTION_WIDTH + SWITCH_WIDTH * COLUMNS + PLATE_WALL_THICKNESS * 2, PLATE_HEIGHT]);
+}
